@@ -1,0 +1,9 @@
+twi_user: xxx
+twi_passwd: xxx
+
+
+debug: true
+
+mongo_host: xxx
+mongo_port: xxx
+mongo_database: xxx
