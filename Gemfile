@@ -2,6 +2,7 @@ source "http://rubygems.org"
 source 'http://gems.github.com'
 
 gem 'mongo'
+gem 'bson_ext'
 gem 'unicode'         
 gem 'tweetstream'
 gem 'yajl-ruby'

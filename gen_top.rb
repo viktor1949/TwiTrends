@@ -52,4 +52,13 @@ def start
 
 end
 
-start
+loop do
+      begin
+	start
+      rescue =>e
+        puts "WTF?! Something happens: #{e.inspect}"
+      end 
+      puts "sleep 120"
+      sleep 120        
+end
+

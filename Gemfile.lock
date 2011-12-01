@@ -1,0 +1,42 @@
+GEM
+  remote: http://rubygems.org/
+  remote: http://gems.github.com/
+  specs:
+    bson (1.5.1)
+    bson_ext (1.5.1)
+    daemons (1.1.4)
+    eventmachine (0.12.10)
+    http_parser.rb (0.5.3)
+    mongo (1.5.1)
+      bson (= 1.5.1)
+    multi_json (1.0.4)
+    rack (1.3.5)
+    rack-protection (1.1.4)
+      rack
+    simple_oauth (0.1.5)
+    sinatra (1.3.1)
+      rack (~> 1.3, >= 1.3.4)
+      rack-protection (~> 1.1, >= 1.1.2)
+      tilt (~> 1.3, >= 1.3.3)
+    tilt (1.3.3)
+    tweetstream (1.1.3)
+      daemons (~> 1.1.4)
+      multi_json (~> 1.0.3)
+      twitter-stream (~> 0.1.14)
+    twitter-stream (0.1.14)
+      eventmachine (>= 0.12.8)
+      http_parser.rb (~> 0.5.1)
+      simple_oauth (~> 0.1.4)
+    unicode (0.4.0)
+    yajl-ruby (1.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bson_ext
+  mongo
+  sinatra
+  tweetstream
+  unicode
+  yajl-ruby
