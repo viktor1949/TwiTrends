@@ -9,3 +9,4 @@ gem 'yajl-ruby'
 gem 'sinatra'
 
 gem "mongoid"
+gem "unicorn"

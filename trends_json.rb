@@ -1,8 +1,9 @@
-require 'sinatra'
 require './models/top.rb'
 require 'mongoid'
 
+require "sinatra/base"
 
+class MyApp < Sinatra::Base
 configure do
    Mongoid.configure do |config|
     @yml = YAML::load(File.open(File.dirname(__FILE__) + '/database.yml'))
@@ -36,5 +37,7 @@ get '/top.json' do
   else
     error 404, {:error => "user not found"}.to_json 
   end
+
+end
 
 end
