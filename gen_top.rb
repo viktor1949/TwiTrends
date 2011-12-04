@@ -11,7 +11,7 @@ def start
   @yml = YAML::load(File.open(File.dirname(__FILE__) + '/database.yml'))
   db = Mongo::Connection.new(@yml['mongo_host'], @yml['mongo_port'], :pool_size => MONGO_POOL_SIZE).db(@yml['mongo_database'])
   @h_timeline = db.collection("hashtags_timeline") 
-  @h_top = db.collection("hashtags_current_top") 
+  @h_top = db.collection("tops") 
 
   #find uniq
   #db.$cmd.findOne({"distinct" : "hashtags_timeline", "key" : "hashtag"})

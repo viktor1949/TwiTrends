@@ -7,3 +7,5 @@ gem 'unicode'
 gem 'tweetstream'
 gem 'yajl-ruby'
 gem 'sinatra'
+
+gem "mongoid"
