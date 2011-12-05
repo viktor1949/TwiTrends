@@ -43,9 +43,9 @@ def start
   @results = @h_timeline.map_reduce(map, reduce, :out => "mr_results")
   @h_top.remove() #clean htop table
 
-  @results.find({},:sort => ['value', :desc ], :limit => 30 ).to_a.each do |r|
+  @results.find({},:sort => ['value', :desc ], :limit => 30 ).to_a.each_with_index do |r,  index|
     puts "#{r['_id']['hashtag']} --> #{r['value']['count']}"
-    @h_top.insert({:hashtag => r['_id']['hashtag'], :count => r['value']['count']})
+    @h_top.insert({:rate =>index, :hashtag => r['_id']['hashtag'], :count => r['value']['count']})
   end
 
   @h_timeline.remove({:created_at => {"$lte" => Time.now.utc.to_i - 3600}})

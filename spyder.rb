@@ -34,10 +34,16 @@ def start
   ) do |status|
     begin         
       next if status.source['twitterfeed'] # no need bot messages from twitterfeed
+      #TODO
+      #avoid twitter bots. if < 10 followers 
+      # reg date: < 1 week
+      # statuses > 10
+      # and smthng
 
       status.text.scan(/#\p{Word}+/).each do |hashtag|
         @h_timeline.insert({:hashtag => hashtag, :created_at => Time.now.utc.to_i})
-        puts Time.new.to_s + "#{status.text} --> #{hashtag}"        
+
+        puts "http://twitter.com/#{status.user.screen_name}/status/#{status.id} -> #{status.text} --> #{hashtag}"        
         @hastags.update({:hashtag => hashtag}, {'$inc' => {:count => 1 }}, :upsert => true )    
       end
       
