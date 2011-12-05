@@ -1,6 +1,6 @@
 require "rubygems"
 require "sinatra"
 
-require './trends_json.rb'
+require './app/trends_json.rb'
 
 run MyApp

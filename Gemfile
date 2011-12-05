@@ -10,3 +10,5 @@ gem 'sinatra'
 
 gem "mongoid"
 gem "unicorn"
+
+gem "haml"

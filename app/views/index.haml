@@ -1,0 +1,8 @@
+%ul#category-filter
+- @hash_top.each do |item|
+  %li.menu_item
+    %a(href="https://twitter.com/#!/search/realtime/#{escapeURI(item.hashtag)}" target="_blank") #{item.hashtag} 
+    #{item.count}
+    
+
+  

@@ -1,0 +1,11 @@
+!!!
+%html
+  %head
+    %title= @message
+  %body
+    #wrapper
+      #header
+        %h1= "#{@message}"
+
+      #content
+        =yield
