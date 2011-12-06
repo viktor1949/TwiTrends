@@ -1,11 +1,25 @@
-!!!
-%html
+<!doctype html>
+%html{:lang => "ru"}
   %head
-    %title= @message
+    %meta{:charset => "utf-8"}
+      %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}
+        %title Тренды русского твиттора
+        %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}
+          %link{:href => "css/style.css", :rel => "stylesheet"}
   %body
-    #wrapper
-      #header
-        %h1= "#{@message}"
-
-      #content
-        =yield
+    #root
+      %h1 Русские твитренды
+      %h2 (за 10 последних минут)
+      =yield
+      #root-footer
+    #footer
+      %p
+        Сделали
+        %a{:href => "http://babi4.com/"} Виктор Бабичев
+        и
+        %a{:href => "http://romasosnovsky.com/"} Рома Сосновский
+    /
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+      <script>window.jQuery || document.write('<script src="jquery-1.7.1.min.js"><\/script>')</script>
+      <script src="json2.js"></script>
+      <script src="main.js"></script>

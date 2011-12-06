@@ -1,8 +1,7 @@
-%ul#category-filter
-- @hash_top.each do |item|
-  %li.menu_item
-    %a(href="https://twitter.com/#!/search/realtime/#{escapeURI(item.hashtag)}" target="_blank") #{item.hashtag} 
-    #{item.count}
-    
-
-  
+%table#trends
+  - @hash_top.each_with_index do |item, index|
+    %tbody
+      %tr
+        %td.trends-count=index+1
+        %td.trends-hashtag
+          %a(href="https://twitter.com/#!/search/realtime/#{escapeURI(item.hashtag)}" target="_blank") #{item.hashtag} 

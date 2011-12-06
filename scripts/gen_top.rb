@@ -55,7 +55,7 @@ loop do
       rescue =>e
         puts "WTF?! Something happens: #{e.inspect}"
       end 
-      puts "sleep 120"
-      sleep 120        
+      puts "sleep 60"
+      sleep 60        
 end
 

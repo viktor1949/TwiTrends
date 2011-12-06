@@ -22,7 +22,7 @@ class MyApp < Sinatra::Base
   end
 
   before do
-    
+    cache_control :public, :must_revalidate, :max_age => 60
   end
 
    helpers do
