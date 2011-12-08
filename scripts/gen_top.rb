@@ -6,12 +6,14 @@ require 'mongo'
 
 
 MONGO_POOL_SIZE = 100
-
-def start
+def init
   @yml = YAML::load(File.open(File.expand_path("../database.yml", File.dirname(__FILE__))))
   db = Mongo::Connection.new(@yml['mongo_host'], @yml['mongo_port'], :pool_size => MONGO_POOL_SIZE).db(@yml['mongo_database'])
   @h_timeline = db.collection("hashtags_timeline") 
-  @h_top = db.collection("tops") 
+  @h_top = db.collection("tops")   
+end
+
+def start
 
 
   map = <<-eos
@@ -40,7 +42,10 @@ def start
   @results = @h_timeline.map_reduce(map, reduce, :out => "mr_results")
   @h_top.remove() #clean htop table
 
-  @results.find({},:sort => ['value', :desc ], :limit => 30 ).to_a.each_with_index do |r,  index|
+  top = @results.find({},:sort => ['value', :desc ], :limit => 30 )
+  return if top.count == 0  #cannot update table, use previous data
+
+  top.to_a.each_with_index do |r,  index|
     puts "#{r['_id']['hashtag']} --> #{r['value']['count']}"
     @h_top.insert({:rate =>index, :hashtag => r['_id']['hashtag'], :count => r['value']['count']})
   end
@@ -49,13 +54,16 @@ def start
 
 end
 
+init
 loop do
-      begin
-	start
-      rescue =>e
-        puts "WTF?! Something happens: #{e.inspect}"
-      end 
-      puts "sleep 60"
-      sleep 60        
+
+  begin
+    start
+  rescue =>e
+    puts "WTF?! Something happens: #{e.inspect}"
+  end 
+
+  puts "sleep 60"
+  sleep 60        
 end
 

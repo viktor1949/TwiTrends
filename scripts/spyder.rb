@@ -17,7 +17,9 @@ def start
   @tweets = db.collection("tweets") 
   @h_timeline = db.collection("hashtags_timeline") 
   @hastags = db.collection("hashtags_top") 
-    
+  
+  @h_timeline2 = db.collection("hashtags_timeline2") #tmp collection. TODO delete it
+      
   TweetStream.configure do |config|
     config.username = @yml['twi_user']
     config.password = @yml['twi_passwd']
@@ -32,20 +34,22 @@ def start
     :delete => Proc.new{ |status_id, user_id| puts status_id },
     :limit => Proc.new{ |skip_count|  puts skip_count }
   ) do |status|
-    begin         
-      next if status.source['twitterfeed'] # no need bot messages from twitterfeed
-      #TODO
-      #avoid twitter bots. if < 10 followers 
-      # reg date: < 1 week
-      # statuses > 10
-      # and smthng
+    begin
+      twisource = status.source
+      #avoid spam sources
+      next if twisource['twitterfeed'] || twisource['ping.fm'] || twisource['dlvr.it'] || twisource['bicotender']
+      next if status[:retweeted_status]
+      next if status.user.followers_count < 10 || status.user.friends_count < 5
 
-      status.text.scan(/#\p{Word}+/).each do |hashtag|
+      status.text.scan(/#\p{Word}+/).each do |hashtag| #TODO use status.entities.hashtags instead
         @h_timeline.insert({:hashtag => hashtag, :created_at => Time.now.utc.to_i})
+        @h_timeline2.insert({:hashtag => hashtag, :created_at => Time.now.utc.to_i}) #TODO delete
 
         puts "http://twitter.com/#{status.user.screen_name}/status/#{status.id} -> #{status.text} --> #{hashtag}"        
+        
         @hastags.update({:hashtag => hashtag}, {'$inc' => {:count => 1 }}, :upsert => true )    
       end
+
       
     rescue => e 
       puts "Error happens #{e.message} \n #{status.text}"
