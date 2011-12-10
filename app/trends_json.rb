@@ -45,20 +45,22 @@ class MyApp < Sinatra::Base
 
   get '/' do
     @hash_top = Top.all.asc(:rate)
+    
+    haml :index 
 
-    if request_from_mobile_agent?
-      haml :mobile
-    else
-      haml :index 
-    end
+    #if request_from_mobile_agent?
+    #  haml :mobile
+    #else
+    #  haml :index 
+    #end
 
 
   end 
 
   get '/mobile' do
     @hash_top = Top.all.asc(:rate)
-    haml :mobile
-  
+    #haml :mobile
+    haml :index 
   end 
 
 
