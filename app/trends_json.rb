@@ -7,8 +7,12 @@ require 'yajl/json_gem'
 require 'uri'
 
 require "sinatra/base"
+require 'rack/mobile-detect'
+
 
 class MyApp < Sinatra::Base
+  use Rack::MobileDetect, :redirect_to => '/mobile'
+
   configure do
      Mongoid.configure do |config|
       @yml = YAML::load(File.open(File.expand_path("../database.yml", File.dirname(__FILE__))))
@@ -33,10 +37,16 @@ class MyApp < Sinatra::Base
 
 
   get '/' do
-    @message = "Ололошечги, твитренды(за 10 последних минут)"
     @hash_top = Top.all.asc(:rate)
     haml :index 
   end 
+
+  get '/mobile' do
+    @hash_top = Top.all.asc(:rate)
+    haml :mobile
+  end 
+
+
 
   get '/about' do  
     haml :about  

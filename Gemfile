@@ -12,3 +12,4 @@ gem "mongoid"
 gem "unicorn"
 
 gem "haml"
+gem "rack-mobile-detect"

@@ -40,10 +40,12 @@ def start
   eos
   
   @results = @h_timeline.map_reduce(map, reduce, :out => "mr_results")
-  @h_top.remove() #clean htop table
+  
 
   top = @results.find({},:sort => ['value', :desc ], :limit => 30 )
-  return if top.count == 0  #cannot update table, use previous data
+  return if top.count == 0  #if no new data aviable 
+
+  @h_top.remove() #clean htop table
 
   top.to_a.each_with_index do |r,  index|
     puts "#{r['_id']['hashtag']} --> #{r['value']['count']}"
