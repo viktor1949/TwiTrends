@@ -11,7 +11,9 @@ require 'rack/mobile-detect'
 
 
 class MyApp < Sinatra::Base
-  use Rack::MobileDetect, :redirect_to => 'http://trends.babi4.com/mobile' #TODO workaround, change
+  use Rack::MobileDetect
+
+  set :haml, {:format => :html5 }
 
   configure do
      Mongoid.configure do |config|
@@ -33,17 +35,30 @@ class MyApp < Sinatra::Base
     def escapeURI(link)
       URI.escape(link)
     end
+
+    def request_from_mobile_agent?
+      !!env[Rack::MobileDetect::X_HEADER]
+    end
+
   end
 
 
   get '/' do
     @hash_top = Top.all.asc(:rate)
+
     haml :index 
+
   end 
 
   get '/mobile' do
     @hash_top = Top.all.asc(:rate)
-    haml :mobile
+
+    if request_from_mobile_agent?
+      haml :mobile
+    else
+      haml :index 
+    end
+    
   end 
 
 
