@@ -11,7 +11,7 @@ require 'rack/mobile-detect'
 
 
 class MyApp < Sinatra::Base
-  use Rack::MobileDetect, :redirect_to => '/mobile'
+  use Rack::MobileDetect, :redirect_to => 'http://trends.babi4.com/mobile' #TODO workaround, change
 
   configure do
      Mongoid.configure do |config|
