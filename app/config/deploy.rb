@@ -28,6 +28,9 @@ set :deploy_via, :remote_cache
 set :rvm_ruby_string, '1.9.2@stream'
 set :rvm_type, :user
 
+
+after 'deploy:update_code', 'symlinks:set'
+
 namespace :symlinks do
   task :set, :roles => :app  do
     ## Здесь для примера вставлен только один конфиг с приватными данными - database.yml. 
