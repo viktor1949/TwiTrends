@@ -37,8 +37,9 @@ namespace :symlinks do
     #Обычно для таких вещей создают папку /srv/myapp/shared/config и кладут файлы туда. 
     #При каждом деплое создаются ссылки на них в нужные места приложения.    
 
-    run "rm -f /home/main/#{application}/current/database.yml"
-    run "ln -s /home/main/#{application}/shared/config/database.yml /home/main/#{application}/current/database.yml"
+    run "rm -f #{current_release}/database.yml"
+    run "ln -s #{deploy_to}/shared/config/database.yml #{current_release}/database.yml"
+
   end
 end
 
