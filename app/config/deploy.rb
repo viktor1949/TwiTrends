@@ -21,6 +21,7 @@ set :unicorn_pid, "/home/main/#{application}/shared/pids/unicorn.pid"
 set :use_sudo, false
 
 set :deploy_to, "/home/main/#{application}"
+set :deploy_via, :remote_cache
 
 
 
