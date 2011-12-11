@@ -14,7 +14,7 @@ timeout 30
 listen "/home/main/TwiTrend/shared/sockets/unicorn.sock", :backlog => 64
 
 # Set process id path
-pid "/home/main/TwiTrend/shared/pids"
+pid "/home/main/TwiTrend/shared/pids/unicorn.pid"
 
 # Set log file paths
 stderr_path "/home/main/TwiTrend/shared/log/unicorn.stderr.log"
