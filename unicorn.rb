@@ -3,7 +3,7 @@
 @dir = "/home/main/TwiTrend/current/app"
 
 worker_processes 2
-working_directory @dir
+#working_directory @dir
 
 preload_app true
 
