@@ -28,6 +28,17 @@ set :deploy_via, :remote_cache
 set :rvm_ruby_string, '1.9.2@stream'
 set :rvm_type, :user
 
+namespace :symlinks do
+  task :set, :roles => :app  do
+    ## Здесь для примера вставлен только один конфиг с приватными данными - database.yml. 
+    #Обычно для таких вещей создают папку /srv/myapp/shared/config и кладут файлы туда. 
+    #При каждом деплое создаются ссылки на них в нужные места приложения.    
+
+    run "rm -f /home/main/#{application}/current/database.yml"
+    run "ln -s /home/main/#{application}/shared/config/database.yml /home/main/#{application}/current/database.yml"
+  end
+end
+
 # Далее идут правила для перезапуска unicorn. Их стоит просто принять на веру - они работают.
 # В случае с Rails 3 приложениями стоит заменять bundle exec unicorn_rails на bundle exec unicorn
 namespace :deploy do
