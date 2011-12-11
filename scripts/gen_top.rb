@@ -20,7 +20,7 @@ def start
     function() {
     now = new Date();
     d = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
-    ten_minute_ago = ((d + (new Date).getTimezoneOffset() * 60000) - 600000) /1000
+    ten_minute_ago = ((d + (new Date).getTimezoneOffset() * 60000) - 600000) / 1000
     if (this.created_at > ten_minute_ago){                                   
       emit({hashtag: this.hashtag}, {count: 1});
     }

@@ -13,3 +13,5 @@ gem "unicorn"
 
 gem "haml"
 gem "rack-mobile-detect"
+
+gem "capistrano"
