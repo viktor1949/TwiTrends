@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require './models/top.rb'
+require_relative 'models/top.rb'
 require 'mongoid'
 require 'haml'
 require 'yajl/json_gem'
