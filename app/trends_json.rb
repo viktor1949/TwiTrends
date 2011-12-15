@@ -44,7 +44,7 @@ class MyApp < Sinatra::Base
 
 
   get '/' do
-    @hash_top = Top.all.asc(:rate)
+    @hash_top = Top.all.desc(:count)
     
     haml :index 
 
@@ -58,7 +58,7 @@ class MyApp < Sinatra::Base
   end 
 
   get '/mobile' do
-    @hash_top = Top.all.asc(:rate)
+    @hash_top = Top.all.desc(:count)
     #haml :mobile
     haml :index 
   end 
@@ -72,12 +72,11 @@ class MyApp < Sinatra::Base
   get '/top.json' do
 
     content_type :json
-    hash_top = Top.all.asc(:rate)
+    hash_top = Top.all.desc(:count)
 
     if hash_top
         hash_top.map { |item|  
           {
-            :rate => item.rate,
             :hashtag => item.hashtag, 
             :count => item.count
           } 

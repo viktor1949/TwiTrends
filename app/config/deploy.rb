@@ -5,6 +5,7 @@ require 'bundler/capistrano'
 
 set :application, "TwiTrend"
 set :repository,  "git@github.com:babi4/TwiTrends.git"
+set :rails_env, "production" #TODO change variable
 
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`

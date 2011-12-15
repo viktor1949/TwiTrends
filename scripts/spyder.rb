@@ -18,7 +18,6 @@ def start
   @h_timeline = db.collection("hashtags_timeline") 
   @hastags = db.collection("hashtags_top") 
   
-  @h_timeline2 = db.collection("hashtags_timeline2") #tmp collection. TODO delete it
       
   TweetStream.configure do |config|
     config.username = @yml['twi_user']
@@ -43,7 +42,6 @@ def start
 
       status.text.scan(/#\p{Word}+/).each do |hashtag| #TODO use status.entities.hashtags instead
         @h_timeline.insert({:hashtag => hashtag, :created_at => Time.now.utc.to_i})
-        @h_timeline2.insert({:hashtag => hashtag, :created_at => Time.now.utc.to_i}) #TODO delete
 
         puts "http://twitter.com/#{status.user.screen_name}/status/#{status.id} -> #{status.text} --> #{hashtag}"        
         

@@ -4,6 +4,24 @@ require 'yaml'
 require 'yajl'
 require 'mongo'         
 
+require 'active_support/all'
+
+#http://stackoverflow.com/questions/2030336/how-do-i-create-a-hash-in-ruby-that-compares-strings-ignoring-case
+class CaseInsensitiveHash < HashWithIndifferentAccess
+  # This method shouldn't need an override, but my tests say otherwise.
+  def [](key)
+    super convert_key(key)
+  end
+
+  protected
+  #TODO add translit
+  def convert_key(key)
+    key.respond_to?(:downcase) ? key.downcase : key
+  end  
+end
+
+
+
 
 MONGO_POOL_SIZE = 100
 def init
@@ -43,18 +61,35 @@ def start
   
 
   top = @results.find({},:sort => ['value', :desc ], :limit => 30 )
-  return if top.count == 0  #if no new data aviable 
+  #return if top.count == 0  #if no new data aviable 
+
+  hash_sorted = CaseInsensitiveHash.new
 
   @h_top.remove() #clean htop table
 
-  top.to_a.each_with_index do |r,  index|
-    puts "#{r['_id']['hashtag']} --> #{r['value']['count']}"
-    @h_top.insert({:rate =>index, :hashtag => r['_id']['hashtag'], :count => r['value']['count']})
+
+
+  top.to_a.each do |r|
+    hashtag = r['_id']['hashtag']
+    count = r['value']['count']    
+
+    #avoid duplicate hashtags
+    hash_sorted[hashtag] = hash_sorted.has_key?(hashtag) ? hash_sorted[hashtag] + count : count    
+
+  end
+  
+  hash_sorted.each_key do |key|
+
+    puts "#{key} --> #{hash_sorted[key]}"
+    @h_top.insert({:hashtag => key, :count => hash_sorted[key]})    
+
   end
 
   @h_timeline.remove({:created_at => {"$lte" => Time.now.utc.to_i - 3600}})
 
 end
+
+
 
 init
 loop do
