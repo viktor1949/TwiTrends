@@ -51,7 +51,23 @@ h1 {
 
 h2 {
   font-size: 14px;
-  color: #aaa; }
+  color: #aaa;
+  padding: 5px 0 10px; }
+
+h2 a {
+  padding: 2px 5px;
+  margin: 0 4px; }
+
+h2 a.active {
+  background: #0069D6;
+  color: #fff;
+  cursor: default;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -o-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -khtml-border-radius: 6px;
+  border-radius: 6px; }
 
 a {
   text-decoration: none;
@@ -59,6 +75,9 @@ a {
 
 a:hover {
   color: #00438A; }
+
+
+
 
 #root {
   width: 300px;

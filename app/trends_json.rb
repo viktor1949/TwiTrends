@@ -9,6 +9,10 @@ require 'uri'
 require "sinatra/base"
 require 'rack/mobile-detect'
 
+require 'coffee-script'
+
+
+
 
 class MyApp < Sinatra::Base
   use Rack::MobileDetect
@@ -43,9 +47,26 @@ class MyApp < Sinatra::Base
   end
 
 
+
+  get "/index.js" do
+    coffee :ajax
+  end
+
+
   get '/' do
-    @hash_top = Top.all.desc(:count)
+    mode = params[:mode]
+
+    Table = case mode
+       when 'min10' then Top10
+       when 'min30' then Top30
+       when 'min60' then Top60
+       when 'min1440' then Top1440
+       else Top10
+    end
+
+    @hash_top = Table.exist_hashs()
     
+
     haml :index 
 
     #if request_from_mobile_agent?
@@ -58,7 +79,7 @@ class MyApp < Sinatra::Base
   end 
 
   get '/mobile' do
-    @hash_top = Top.all.desc(:count)
+    @hash_top = Top10.exist_hashs()
     #haml :mobile
     haml :index 
   end 
@@ -70,9 +91,19 @@ class MyApp < Sinatra::Base
   end  
 
   get '/top.json' do
+    mode = params[:mode]
 
     content_type :json
-    hash_top = Top.all.desc(:count)
+
+    Table = case mode
+       when 'min10' then Top10
+       when 'min30' then Top30
+       when 'min60' then Top60
+       when 'min1440' then Top1440
+       else Top10
+    end
+
+    hash_top = Table.exist_hashs()
 
     if hash_top
         hash_top.map { |item|  

@@ -15,3 +15,6 @@ gem "haml"
 gem "rack-mobile-detect"
 
 gem "capistrano"
+
+gem "coffee-script"
+gem "therubyracer"

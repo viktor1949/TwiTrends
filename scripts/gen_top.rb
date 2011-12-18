@@ -29,20 +29,55 @@ def init
   db = Mongo::Connection.new(@yml['mongo_host'], @yml['mongo_port'], :pool_size => MONGO_POOL_SIZE).db(@yml['mongo_database'])
   @h_timeline = db.collection("hashtags_timeline") 
   @h_top = db.collection("tops")   
+  @h_all = db.collection("all")   
+  @h_top10 = db.collection("top10s")
+  @h_top30 = db.collection("top30s")   
+  @h_top60 = db.collection("top60s")   
+  @h_top1440 = db.collection("top1440s")   
+end
+
+def update_top(table, key, count)
+   table.update({:hashtag => key}, 
+                    {'$inc' => {:count => count }}, 
+                    :upsert => true 
+                  )    
+end
+
+def remove_old(table, mode=:h10)
+
+  seconds = {
+              :h10 => 1 * 10,
+              :h30 => 60 * 30,
+              :h60 => 60 * 60,
+              :h1440 =>  24 * 60 * 60
+            }
+  
+  #find all < n minute
+  h_item  = @h_all.find({'$or' => [:time => {"$lte" => Time.now.utc.to_i - seconds[mode]}, mode.to_s => 0 ]})
+  h_item.each do |h|
+
+    h['top'].each_key do |key|
+      puts "for #{key} minus #{h['top'][key]}"
+      # - count of previous value
+      table.update({:hashtag => key}, {'$inc' => {:count => h['top'][key] * -1}})          
+    end
+
+    #set already checked
+    @h_all.update({:time => h['time']}, {'$set' => { mode => 1 }})
+
+  end
+  
+  #set count = 0 if count < 0 
+  table.update({:count => {'$lt' => 0}}, {'$set' => {:count => 0}}, :upsert => false , :multi => true)          
+
 end
 
 def start
 
-
   map = <<-eos
     function() {
-    now = new Date();
-    d = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
-    ten_minute_ago = ((d + (new Date).getTimezoneOffset() * 60000) - 600000) / 1000
-    if (this.created_at > ten_minute_ago){                                   
       emit({hashtag: this.hashtag}, {count: 1});
     }
-  }
   eos
   
   reduce = <<-eos
@@ -58,17 +93,11 @@ def start
   eos
   
   @results = @h_timeline.map_reduce(map, reduce, :out => "mr_results")
-  
-
   top = @results.find({},:sort => ['value', :desc ], :limit => 30 )
   #return if top.count == 0  #if no new data aviable 
 
+
   hash_sorted = CaseInsensitiveHash.new
-
-  @h_top.remove() #clean htop table
-
-
-
   top.to_a.each do |r|
     hashtag = r['_id']['hashtag']
     count = r['value']['count']    
@@ -78,14 +107,34 @@ def start
 
   end
   
+  @h_all.insert(:time =>Time.now.utc.to_i, 
+                :top => hash_sorted, 
+                :h10 => 0, 
+                :h30 => 0, 
+                :h60 => 0, 
+                :h1440 => 0
+                )
+
+
+
+
   hash_sorted.each_key do |key|
 
     puts "#{key} --> #{hash_sorted[key]}"
-    @h_top.insert({:hashtag => key, :count => hash_sorted[key]})    
-
+    update_top(@h_top10, key, hash_sorted[key])
+    update_top(@h_top30, key, hash_sorted[key])
+    update_top(@h_top60, key, hash_sorted[key])
+    update_top(@h_top1440, key, hash_sorted[key])
+  
   end
 
-  @h_timeline.remove({:created_at => {"$lte" => Time.now.utc.to_i - 3600}})
+  remove_old(@h_top10, :h10)
+  remove_old(@h_top30, :h30)
+  remove_old(@h_top60, :h60)
+  remove_old(@h_top1440, :h1440)
+
+  #clear timeline for next MapReduce
+  @h_timeline.remove()
 
 end
 
