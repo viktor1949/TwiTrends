@@ -46,7 +46,7 @@ end
 def remove_old(table, mode=:h10)
 
   seconds = {
-              :h10 => 1 * 10,
+              :h10 => 60 * 10,
               :h30 => 60 * 30,
               :h60 => 60 * 60,
               :h1440 =>  24 * 60 * 60
