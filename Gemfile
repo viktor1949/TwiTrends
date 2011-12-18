@@ -18,4 +18,3 @@ gem "capistrano"
 
 gem "coffee-script"
 gem "therubyracer"
-gem "rake"
