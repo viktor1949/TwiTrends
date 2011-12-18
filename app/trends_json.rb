@@ -56,7 +56,7 @@ class MyApp < Sinatra::Base
   get '/' do
     mode = params[:mode]
 
-    Table = case mode
+    table = case mode
        when 'min10' then Top10
        when 'min30' then Top30
        when 'min60' then Top60
@@ -64,7 +64,7 @@ class MyApp < Sinatra::Base
        else Top10
     end
 
-    @hash_top = Table.exist_hashs()
+    @hash_top = table.exist_hashs()
     
 
     haml :index 
@@ -79,7 +79,7 @@ class MyApp < Sinatra::Base
   end 
 
   get '/mobile' do
-    @hash_top = Top10.exist_hashs()
+    @hash_top = table.exist_hashs()
     #haml :mobile
     haml :index 
   end 
@@ -95,7 +95,7 @@ class MyApp < Sinatra::Base
 
     content_type :json
 
-    Table = case mode
+    table = case mode
        when 'min10' then Top10
        when 'min30' then Top30
        when 'min60' then Top60
@@ -103,7 +103,7 @@ class MyApp < Sinatra::Base
        else Top10
     end
 
-    hash_top = Table.exist_hashs()
+    hash_top = table.exist_hashs()
 
     if hash_top
         hash_top.map { |item|  
