@@ -1,7 +1,8 @@
-%table#trends
-  - @hash_top.each_with_index do |item, index|
-    %tr
-      %td.trends-count=index+1
-      %td.trends-hashtag
-        %a(href="http://twitwave.ru/wave/index/#{escapeURI(item.hashtag)}" target="_blank") #{item.hashtag} 
-        %sup=item.count.to_i
+%div#results
+  %table#trends
+    - @hash_top.each_with_index do |item, index|
+      %tr
+        %td.trends-count=index+1
+        %td.trends-hashtag
+          %a(href="http://twitwave.ru/wave/index/#{escapeURI(item.hashtag)}" target="_blank")   #{item.hashtag} 
+          %sup=item.count.to_i

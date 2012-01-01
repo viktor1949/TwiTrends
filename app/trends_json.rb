@@ -19,7 +19,7 @@ class MyApp < Sinatra::Base
   use Rack::MobileDetect
 
   set :haml, {:format => :html5 }
-  enable :sessions
+  #enable :sessions
   
   configure :development do
     register Sinatra::Reloader
@@ -62,7 +62,7 @@ class MyApp < Sinatra::Base
   get '/' do
     @hash_top = Top10.exist_hashs()    
     haml :index 
-    
+
     #if request_from_mobile_agent?
     #  haml :mobile
     #else
