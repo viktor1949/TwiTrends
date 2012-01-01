@@ -7,6 +7,7 @@ require 'yajl/json_gem'
 require 'uri'
 
 require "sinatra/base"
+require "sinatra/reloader"
 require 'rack/mobile-detect'
 
 require 'coffee-script'
@@ -18,6 +19,10 @@ class MyApp < Sinatra::Base
   use Rack::MobileDetect
 
   set :haml, {:format => :html5 }
+  
+  configure :development do
+    register Sinatra::Reloader
+  end
 
   configure do
      Mongoid.configure do |config|
