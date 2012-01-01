@@ -7,6 +7,7 @@ gem 'unicode'
 gem 'tweetstream'
 gem 'yajl-ruby'
 gem 'sinatra'
+gem 'sinatra-reloader'
 
 gem "mongoid"
 gem "unicorn"

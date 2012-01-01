@@ -19,6 +19,7 @@ class MyApp < Sinatra::Base
   use Rack::MobileDetect
 
   set :haml, {:format => :html5 }
+  enable :sessions
   
   configure :development do
     register Sinatra::Reloader
@@ -59,29 +60,16 @@ class MyApp < Sinatra::Base
 
 
   get '/' do
-    mode = params[:mode]
-
-    table = case mode
-       when 'min10' then Top10
-       when 'min30' then Top30
-       when 'min60' then Top60
-       when 'min1440' then Top1440
-       else Top10
-    end
-
-    @hash_top = table.exist_hashs()
-    
-
+    @hash_top = Top10.exist_hashs()    
     haml :index 
-
+    
     #if request_from_mobile_agent?
     #  haml :mobile
     #else
     #  haml :index 
     #end
-
-
   end 
+
 
   get '/mobile' do
     @hash_top = table.exist_hashs()
@@ -101,10 +89,10 @@ class MyApp < Sinatra::Base
     content_type :json
 
     table = case mode
-       when 'min10' then Top10
-       when 'min30' then Top30
-       when 'min60' then Top60
-       when 'min1440' then Top1440
+       when '10min' then Top10
+       when '30min' then Top30
+       when 'hour' then Top60
+       when 'day' then Top1440
        else Top10
     end
 

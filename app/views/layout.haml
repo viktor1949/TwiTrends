@@ -30,10 +30,11 @@
     #root
       %h1 Русские твитренды
       %h2#time
-        %a#min10.active{:href => "#"} 10 минут
-        %a#min30{:href => "#"} 30 минут
-        %a#min60{:href => "#"} час
-        %a#min1440{:href => "#"} день
+        %a#10min.active{:href => "/#10min"} 10 минут
+        %a#30min{:href => "/#30min"} 30 минут
+        %a#hour{:href => "/#hour"} час
+        %a#day{:href => "#day"} день
+
 
       =yield
 
