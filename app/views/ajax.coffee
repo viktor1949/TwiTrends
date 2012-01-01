@@ -1,4 +1,4 @@
-load_table = (table) ->
+load_table = (table) ->		
 	($ "#time a").removeClass("active")
 	$("##{table}").addClass("active")
 	$.getJSON "/top.json?mode=#{table}", (data) ->
@@ -17,7 +17,8 @@ load_table = (table) ->
 			)  
 
 $ ->
-	load_table(window.location.hash[1..-1])
+	hash = window.location.hash[1..-1]
+	load_table(hash) if hash.length > 0 #TODO why hash? isn't work?
 
 	($ "#time a").live 'click', (e) ->
 		load_table($(this).attr('id'))
