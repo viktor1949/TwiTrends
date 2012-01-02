@@ -62,8 +62,8 @@ namespace :deploy do
 
   task :restart_daemons, :roles => :app do
     run "ps auxww | awk '$0~/spyder|gen/&&$0!~/awk/{print $2}'| xargs kill"
-    run "/home/main/#{application}/current/scripts && screen -m -d -S gen  ruby gen_top.rb"
-    run "/home/main/#{application}/current/scripts && screen -m -d -S spyder ruby spyder.rb"
+    run "cd /home/main/#{application}/current/scripts && screen -m -d -S gen  ruby gen_top.rb"
+    run "cd /home/main/#{application}/current/scripts && screen -m -d -S spyder ruby spyder.rb"
   end
 
 
