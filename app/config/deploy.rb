@@ -44,6 +44,9 @@ namespace :symlinks do
   end
 end
 
+
+after "deploy", "deploy:restart_daemons" 
+
 # Далее идут правила для перезапуска unicorn. Их стоит просто принять на веру - они работают.
 # В случае с Rails 3 приложениями стоит заменять bundle exec unicorn_rails на bundle exec unicorn
 namespace :deploy do
@@ -56,6 +59,14 @@ namespace :deploy do
   task :stop do
     run "if [ -f #{unicorn_pid} ] && [ -e /proc/$(cat #{unicorn_pid}) ]; then kill -QUIT `cat #{unicorn_pid}`; fi"
   end
+
+  task :restart_daemons, :roles => :app do
+    run "ps ax | awk '/gen|spyder/{print $1}' | xargs kill -KILL"
+    run "/home/main/#{application}/current/scripts && screen -m -d -S gen  ruby gen_top.rb"
+    run "/home/main/#{application}/current/scripts && screen -m -d -S spyder ruby spyder.rb"
+  end
+
+
 end
 
 
