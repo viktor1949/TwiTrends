@@ -4,7 +4,7 @@ class Top10
   include Mongoid::Document   
   field :hashtag, type: String
   field :count, type: Integer
-
+  field :diff, type: Integer
   class << self
 
     def exist_hashs
@@ -20,7 +20,7 @@ class Top30
   include Mongoid::Document   
   field :hashtag, type: String
   field :count, type: Integer
-
+  field :diff, type: Integer
   class << self
 
     def exist_hashs
@@ -36,7 +36,7 @@ class Top60
   include Mongoid::Document   
   field :hashtag, type: String
   field :count, type: Integer
-
+  field :diff, type: Integer
   class << self
 
     def exist_hashs
@@ -52,7 +52,7 @@ class Top1440
   include Mongoid::Document   
   field :hashtag, type: String
   field :count, type: Integer
-
+  field :diff, type: Integer
   class << self
 
     def exist_hashs

@@ -34,7 +34,29 @@ def init
   @h_top30 = db.collection("top30s")   
   @h_top60 = db.collection("top60s")   
   @h_top1440 = db.collection("top1440s")   
+
+  @tables_top = [ @h_top10, @h_top30, @h_top60, @h_top1440 ] 
 end
+
+def set_prev_state()
+  @tables_top.each do |table|
+    #table.update({}, {'$set' => {:prev_count => 0 }}, :upsert => false, :multi => true )
+    puts table.name 
+
+    table.find({},:sort => ['count', :desc ], :limit => 15 ).each_with_index do |item, index|      
+      diff = item['prev_index'].nil? ? 0 : item['prev_index'] - index 
+      
+      table.update({:_id => item['_id']} , 
+                    {'$set' => { :prev_index => index, :diff =>  diff} }, 
+                    :upsert => true 
+                  )
+      puts "#{index}, #{item['hashtag']} -> #{diff} = #{index} - #{item['prev_index']}"
+      
+    end
+  
+  end
+end
+
 
 def update_top(table, key, count)
    table.update({:hashtag => key}, 
@@ -93,7 +115,7 @@ def start
   eos
   
   @results = @h_timeline.map_reduce(map, reduce, :out => "mr_results")
-  top = @results.find({},:sort => ['value', :desc ], :limit => 30 )
+  top = @results.find({},:sort => ['value', :desc ], :limit => 15 )
   #return if top.count == 0  #if no new data aviable 
 
 
@@ -133,6 +155,9 @@ def start
   remove_old(@h_top60, :h60)
   remove_old(@h_top1440, :h1440)
 
+  set_prev_state
+
+
   #clear timeline for next MapReduce
   @h_timeline.remove()
 
@@ -141,6 +166,8 @@ end
 
 
 init
+
+
 loop do
 
   begin

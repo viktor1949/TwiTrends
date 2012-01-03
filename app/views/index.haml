@@ -2,7 +2,12 @@
   %table#trends
     - @hash_top.each_with_index do |item, index|
       %tr
-        %td.trends-count=index+1
+        - if item.diff > 0
+          %td.trends-count="&uarr;#{item.diff}"
+        - elsif item.diff < 0
+          %td.trends-count="&darr;#{item.diff * -1}"
+        - else
+          %td.trends-count="&nbsp"
         %td.trends-hashtag
           %a(href="http://twitwave.ru/wave/index/#{escapeURI(item.hashtag)}" target="_blank")   #{item.hashtag} 
           %sup=item.count.to_i

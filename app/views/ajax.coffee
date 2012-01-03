@@ -7,10 +7,20 @@ load_table = (table) ->
 		$('#trends').find("tr").remove()
 		i = 0
 		for d in data
-			i += 1
+			arrow = ""
+			diff = "&nbsp"
+			console.log(d.diff)
+			if d.diff > 0
+				arrow = "&uarr;"
+				diff = d.diff
+			if d.diff < 0
+				arrow = "&darr;"
+				diff = d.diff * -1
+					
+
 			$('#trends > tbody:last')
 			.append("<tr>
-				<td class='trends-count'>#{i}</td>
+				<td class='trends-count'>#{arrow}#{diff}</td>
 			    <td class='trends-hashtag'> 
 				<a href='http://twitwave.ru/wave/index/#{encodeURIComponent(d.hashtag)}' target='_blank'>#{d.hashtag}</a>
 				<sup>#{d.count}</sup>

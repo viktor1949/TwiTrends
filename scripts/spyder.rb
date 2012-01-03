@@ -43,7 +43,7 @@ def start
       status.text.scan(/#\p{Word}+/).each do |hashtag| #TODO use status.entities.hashtags instead
         @h_timeline.insert({:hashtag => hashtag, :created_at => Time.now.utc.to_i})
 
-        puts "http://twitter.com/#{status.user.screen_name}/status/#{status.id} -> #{status.text} --> #{hashtag}"        
+        puts "#{Time.new}, http://twitter.com/#{status.user.screen_name}/status/#{status.id} -> #{status.text} --> #{hashtag}"        
         
         @hastags.update({:hashtag => hashtag}, {'$inc' => {:count => 1 }}, :upsert => true )    
       end

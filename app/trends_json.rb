@@ -102,7 +102,8 @@ class MyApp < Sinatra::Base
         hash_top.map { |item|  
           {
             :hashtag => item.hashtag, 
-            :count => item.count
+            :count => item.count,
+            :diff => item.diff
           } 
         }.to_json 
     else
