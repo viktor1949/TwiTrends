@@ -5,18 +5,11 @@ load_table = (table) ->
 
 	$.getJSON "/top.json?mode=#{table}", (data) ->
 		$('#trends').find("tr").remove()
-		i = 0
 		for d in data
-			arrow = ""
-			diff = "&nbsp"
-			console.log(d.diff)
-			if d.diff > 0
-				arrow = "&uarr;"
-				diff = d.diff
-			if d.diff < 0
-				arrow = "&darr;"
-				diff = d.diff * -1
-					
+			arrow = ""			
+			diff = if d.diff == 0 then "&nbsp" else Math.abs(d.diff)			
+			arrow = "&uarr;" if d.diff > 0				
+			arrow = "&darr;" if d.diff < 0
 
 			$('#trends > tbody:last')
 			.append("<tr>
